@@ -25,7 +25,7 @@ export default function AdminDashboard() {
     const fetchAnalytics = async () => {
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:3001/admin/analytics");
+            const response = await fetch("https://remittance-a87imep33-ibwarsames-projects.vercel.app/admin/analytics");
             if (response.ok) {
                 const data = await response.json();
                 setAnalytics(data);
@@ -48,7 +48,7 @@ export default function AdminDashboard() {
         setGenerating(true);
         try {
             const response = await fetch(
-                "http://localhost:3001/admin/demo/generate",
+                "https://remittance-a87imep33-ibwarsames-projects.vercel.app/admin/demo/generate",
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -67,7 +67,7 @@ export default function AdminDashboard() {
     };
 
     const downloadCSV = () => {
-        window.open("http://localhost:3001/admin/reports/transactions.csv");
+        window.open("https://remittance-a87imep33-ibwarsames-projects.vercel.app/admin/reports/transactions.csv");
     };
 
     const handleLogout = () => {

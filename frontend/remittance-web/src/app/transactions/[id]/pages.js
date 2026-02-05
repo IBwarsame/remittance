@@ -17,7 +17,7 @@ export default function TransactionDetailPage() {
   const fetchTransaction = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/transactions/${params.id}`
+        `https://remittance-a87imep33-ibwarsames-projects.vercel.app/transactions/${params.id}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -33,7 +33,7 @@ export default function TransactionDetailPage() {
     setUploading(true);
     try {
       const response = await fetch(
-        `http://localhost:3001/transactions/${params.id}/proof`,
+        `https://remittance-a87imep33-ibwarsames-projects.vercel.app/transactions/${params.id}/proof`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

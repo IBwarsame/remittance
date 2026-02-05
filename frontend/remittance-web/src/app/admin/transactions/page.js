@@ -23,7 +23,7 @@ export default function AdminTransactionsPage() {
     const fetchTransactions = async () => {
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:3001/transactions");
+            const response = await fetch("https://remittance-a87imep33-ibwarsames-projects.vercel.app/transactions");
             if (response.ok) {
                 const data = await response.json();
                 setTransactions(data.sort((a, b) =>
@@ -39,7 +39,7 @@ export default function AdminTransactionsPage() {
     const confirmFunds = async (id) => {
         try {
             const response = await fetch(
-                `http://localhost:3001/admin/transactions/${id}/confirm-funds`,
+                `https://remittance-a87imep33-ibwarsames-projects.vercel.app/admin/transactions/${id}/confirm-funds`,
                 { method: "PATCH" }
             );
             if (response.ok) {
@@ -54,7 +54,7 @@ export default function AdminTransactionsPage() {
     const completeTransaction = async (id) => {
         try {
             const response = await fetch(
-                `http://localhost:3001/admin/transactions/${id}/complete`,
+                `https://remittance-a87imep33-ibwarsames-projects.vercel.app/admin/transactions/${id}/complete`,
                 { method: "PATCH" }
             );
             if (response.ok) {

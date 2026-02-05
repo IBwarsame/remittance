@@ -22,7 +22,7 @@ export default function SendMoneyPage() {
   const getQuote = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:3001/quote", {
+      const response = await fetch("https://remittance-a87imep33-ibwarsames-projects.vercel.app/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -42,7 +42,7 @@ export default function SendMoneyPage() {
   const createTransaction = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:3001/transactions", {
+      const response = await fetch("https://remittance-a87imep33-ibwarsames-projects.vercel.app/transactions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

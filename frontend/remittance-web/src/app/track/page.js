@@ -16,7 +16,7 @@ export default function TrackPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3001/transactions");
+      const response = await fetch("https://remittance-a87imep33-ibwarsames-projects.vercel.app/transactions");
       const transactions = await response.json();
 
       const found = transactions.find(
