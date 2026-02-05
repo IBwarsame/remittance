@@ -55,12 +55,6 @@ Full-stack remittance application for secure money transfers to East Africa.
 - Node.js v18+
 - npm v9+
 
-### Installation
-
-# Clone repository
-git clone https://github.com/YOUR_USERNAME/remittance-platform.git
-cd remittance-platform
-
 # Backend setup
 cd remittance-api
 npm install
