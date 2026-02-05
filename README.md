@@ -49,4 +49,44 @@ Full-stack remittance application for secure money transfers to East Africa.
 - Express 4.22.1
 - In-memory data store (temporary)
 
-## 📂 Project Structure
+## 🔧 Local Development Setup
+
+### Prerequisites
+- Node.js v18+
+- npm v9+
+
+### Installation
+
+# Clone repository
+git clone https://github.com/YOUR_USERNAME/remittance-platform.git
+cd remittance-platform
+
+# Backend setup
+cd remittance-api
+npm install
+npm run dev  # Runs on port 3001
+
+# Frontend setup (new terminal)
+cd remittance-web
+npm install
+npm run dev  # Runs on port 3000
+
+📊 System Architecture
+- Three-tier architecture: Presentation, Application, Data
+- RESTful API design
+- Server-side fee calculation (security)
+- Dynamic routing for transaction pages
+
+📝 Project Documentation
+See docs/ folder for:
+- System architecture diagrams
+- Use case diagrams
+- Class diagrams
+- Activity diagrams
+- Stakeholder analysis (Onion model)
+
+📧 Contact
+Ibrahim Warsame - w19914200@westminster.ac.uk
+
+📄 License
+This is an academic project for educational purposes only.
