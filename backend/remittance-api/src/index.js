@@ -4,15 +4,8 @@ const express = require("express");
 
 const app = express();
 app.use(express.json());
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-  }),
-);
+app.use(cors()); // Remove localhost restriction for production
 
-const PORT = 3001;
-
-// Updated config with percentage fee
 const RATES = {
   Somalia: 34,
   Ethiopia: 48.5,
@@ -140,33 +133,23 @@ app.patch("/admin/transactions/:id/complete", (req, res) => {
   res.json(txn);
 });
 
-// Analytics endpoint
 app.get("/admin/analytics", (req, res) => {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const thisYear = new Date(now.getFullYear(), 0, 1);
 
   const completed = transactions.filter((t) => t.status === "COMPLETED");
 
-  // Calculate totals
   const totalVolume = completed.reduce((sum, t) => sum + t.amountInGbp, 0);
   const totalFees = completed.reduce((sum, t) => sum + t.feeGbp, 0);
   const totalTransactions = completed.length;
 
-  // Today's stats
-  const todayTxns = completed.filter(
-    (t) => new Date(t.createdAt) >= today
-  );
+  const todayTxns = completed.filter((t) => new Date(t.createdAt) >= today);
   const todayVolume = todayTxns.reduce((sum, t) => sum + t.amountInGbp, 0);
 
-  // This month's stats
-  const monthTxns = completed.filter(
-    (t) => new Date(t.createdAt) >= thisMonth
-  );
+  const monthTxns = completed.filter((t) => new Date(t.createdAt) >= thisMonth);
   const monthVolume = monthTxns.reduce((sum, t) => sum + t.amountInGbp, 0);
 
-  // By country
   const byCountry = {
     Somalia: {
       count: completed.filter((t) => t.country === "Somalia").length,
@@ -182,7 +165,6 @@ app.get("/admin/analytics", (req, res) => {
     },
   };
 
-  // Status breakdown
   const byStatus = {
     CREATED: transactions.filter((t) => t.status === "CREATED").length,
     AWAITING_FUNDS_CHECK: transactions.filter(
@@ -215,7 +197,6 @@ app.get("/admin/analytics", (req, res) => {
   });
 });
 
-// Demo data generator for analytics
 app.post("/admin/demo/generate", (req, res) => {
   const { count = 50 } = req.body;
 
@@ -242,7 +223,6 @@ app.post("/admin/demo/generate", (req, res) => {
     const amountAfterFee = amountInGbp - feeGbp;
     const amountOut = parseFloat((amountAfterFee * rate).toFixed(2));
 
-    // Random date within last 30 days
     const daysAgo = Math.floor(Math.random() * 30);
     const createdAt = new Date();
     createdAt.setDate(createdAt.getDate() - daysAgo);
@@ -260,8 +240,7 @@ app.post("/admin/demo/generate", (req, res) => {
       id,
       country,
       receiverName: demoNames[Math.floor(Math.random() * demoNames.length)],
-      receiverPhone:
-        demoPhones[Math.floor(Math.random() * demoPhones.length)],
+      receiverPhone: demoPhones[Math.floor(Math.random() * demoPhones.length)],
       amountInGbp,
       feeGbp,
       feePercentage: FEE_PERCENTAGE * 100,
@@ -324,6 +303,13 @@ app.get("/admin/reports/transactions.csv", (req, res) => {
   res.send(csv);
 });
 
-app.listen(PORT, () => {
-  console.log(`API running on http://localhost:${PORT}`);
-});
+// Export for Vercel (serverless)
+module.exports = app;
+
+// Only listen on port in local development
+if (require.main === module) {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log(`API running on http://localhost:${PORT}`);
+  });
+}
