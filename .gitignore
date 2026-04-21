@@ -37,6 +37,7 @@ out
 .env.test.local
 .env.production.local
 .env.production
+uploads/
 
 # Misc
 .DS_Store
