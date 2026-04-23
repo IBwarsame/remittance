@@ -2,25 +2,45 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 
-function getTransport() {
-  const port = Number(process.env.MAILTRAP_PORT ?? 2525);
+function getTransport(email) {
+  const isTestEmail =
+    email.endsWith("@remit.local") || email.endsWith("@remit.com");
+
+  if (isTestEmail) {
+    return nodemailer.createTransport({
+      host: process.env.MAILTRAP_HOST,
+      port: Number(process.env.MAILTRAP_PORT ?? 2525),
+      secure: false,
+      auth: {
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASS,
+      },
+    });
+  }
+
   return nodemailer.createTransport({
-    host: process.env.MAILTRAP_HOST,
-    port: port,
-    secure: port === 465,
+    host: "smtp.resend.com",
+    port: 465,
+    secure: true,
     auth: {
-      user: process.env.MAILTRAP_USER,
-      pass: process.env.MAILTRAP_PASS,
+      user: "resend",
+      pass: process.env.RESEND_API_KEY,
     },
   });
 }
 
 async function sendMail({ to, subject, html }) {
-  const transport = getTransport();
-  console.log(`[mailer] sending to ${to}`);
+  const transport = getTransport(to);
+  const isTestEmail =
+    to.endsWith("@remit.local") || to.endsWith("@remit.com");
+
+  console.log(
+    `[mailer] sending to ${to} via ${isTestEmail ? "Mailtrap" : "Resend"}`
+  );
+
   try {
     const info = await transport.sendMail({
-      from: `"Remit" <${process.env.MAIL_FROM ?? "noreply@remit.com"}>`,
+      from: `"Remit" <${isTestEmail ? (process.env.MAIL_FROM ?? "noreply@remit.com") : "onboarding@resend.dev"}>`,
       to,
       subject,
       html,
