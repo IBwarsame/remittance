@@ -34,7 +34,10 @@ app.use("/quote", quoteRoutes);
 app.use("/beneficiaries", beneficiaryRoutes);
 app.use("/bank-details", bankDetailsRoutes);
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () =>
-    console.log(`API running on http://localhost:${PORT}`)
-);
+app.use(cors({
+    origin: [
+        process.env.FRONTEND_URL,
+        "http://localhost:3000",
+    ],
+    credentials: true,
+}));
