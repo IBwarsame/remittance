@@ -4,12 +4,7 @@ const RATES = { Somalia: 34, Ethiopia: 48.5 };
 const FEE_PERCENTAGE = 0.02;
 
 const ALLOWED_TIMESTAMP_FIELDS = ["proofUploadedAt", "fundsInAt", "paidOutAt"];
-const ALLOWED_STATUSES = [
-    "CREATED",
-    "AWAITING_FUNDS_CHECK",
-    "PAID_IN",
-    "COMPLETED",
-];
+const ALLOWED_STATUSES = ["CREATED", "AWAITING_FUNDS_CHECK", "PAID_IN", "COMPLETED",];
 
 class TransactionDao {
     constructor(db) {
@@ -47,7 +42,7 @@ class TransactionDao {
             .run("AWAITING_FUNDS_CHECK", now, proofImagePath, id);
         return this.getById(id);
     }
-    
+
 
     create(data) {
         console.log("DAO userId:", data.userId);
@@ -124,7 +119,7 @@ class TransactionDao {
                 @id, @userId, @country, @receiverName, @receiverPhone,
                 @amountInGbp, @feeGbp, @feePercentage, @rate, @amountOut,
                 @status, @bankReference, @createdAt, @proofUploadedAt,
-                @fundsInAt, @paidOutAt
+                @fundsInAt, @paidOutAt, @proofImagePath
             )`
         );
         const insertAll = this.db.transaction((rows) => {

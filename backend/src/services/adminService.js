@@ -124,6 +124,7 @@ class AdminService {
                         ? createdAt.toISOString()
                         : null,
                 paidOutAt: status === "COMPLETED" ? createdAt.toISOString() : null,
+                proofImagePath: null,
             });
         }
 

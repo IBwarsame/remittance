@@ -77,6 +77,16 @@ class UserDao {
           )
           .run(passwordHash, id);
       }
+      clearPasswordResetToken(id) {
+        this.db
+            .prepare(
+                `UPDATE users
+                 SET passwordResetToken = NULL,
+                     passwordResetExpiresAt = NULL
+                 WHERE id = ?`
+            )
+            .run(id);
+    }
 }
 
 module.exports = UserDao;

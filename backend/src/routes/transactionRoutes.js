@@ -115,7 +115,6 @@ router.post("/", requireRole("user"), async (req, res) => {
     }
 });
 
-// Fix: run multer manually so errors are catchable
 router.patch("/:id/proof", (req, res) => {
     upload.single("proof")(req, res, async (err) => {
         // Multer errors (file size, wrong type) land here

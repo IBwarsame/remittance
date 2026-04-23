@@ -1,6 +1,5 @@
 const RATES = { Somalia: 34, Ethiopia: 48.5 };
 const FEE_PERCENTAGE = 0.02;
-
 class QuoteService {
     calculate({ country, amountInGbp }) {
         if (

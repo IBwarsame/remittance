@@ -52,16 +52,12 @@ class AuthService {
       throw err;
     }
 
-    // FIX 1: await the DAO calls
     const existing = await this.dao.findByEmail(email);
     if (existing) throw new Error("Email already registered");
 
     const id = randomUUID();
     const verificationToken = randomUUID();
-    // FIX 2: consistent bcrypt rounds
     const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
-
-    // FIX 3: await the create call
     await this.dao.create({
       id,
       fullName: fullName.trim(),
@@ -94,7 +90,6 @@ class AuthService {
       throw new Error("Email and password are required");
     }
 
-    // FIX 4: await the DAO call
     const user = await this.dao.findByEmail(email);
     if (
       !user ||
@@ -124,7 +119,6 @@ class AuthService {
   }
 
   async verify(token) {
-    // FIX 5: await DAO calls
     const user = await this.dao.findByToken(token);
     if (!user)
       throw new Error("Invalid or expired verification link");
@@ -136,7 +130,6 @@ class AuthService {
   }
 
   async forgotPassword({ email }) {
-    // FIX 6: await DAO call
     const user = await this.dao.findByEmail(email);
     if (!user)
       return {
@@ -149,7 +142,6 @@ class AuthService {
       Date.now() + 60 * 60 * 1000
     ).toISOString();
 
-    // FIX 7: await DAO call
     await this.dao.setPasswordResetToken(
       user.id,
       token,
@@ -176,7 +168,6 @@ class AuthService {
 
     assertStrongPassword(password);
 
-    // FIX 8: await DAO call
     const user = await this.dao.findByPasswordResetToken(token);
     if (!user) throw new Error("Invalid or expired reset link");
 
@@ -188,9 +179,8 @@ class AuthService {
       password,
       BCRYPT_ROUNDS
     );
-    // FIX 9: await and clear the token after use
     await this.dao.updatePassword(user.id, passwordHash);
-    await this.dao.clearPasswordResetToken(user.id); // prevents token reuse
+    await this.dao.clearPasswordResetToken(user.id);
 
     return {
       message: "Password reset successful. You can now log in.",
