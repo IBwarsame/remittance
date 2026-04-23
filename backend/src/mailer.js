@@ -14,25 +14,22 @@ function getTransport() {
     },
   });
 }
-return nodemailer.createTransport({
-  host: process.env.MAILTRAP_HOST,
-  port: Number(process.env.MAILTRAP_PORT ?? 2525),
-  auth: {
-    user: process.env.MAILTRAP_USER,
-    pass: process.env.MAILTRAP_PASS,
-  },
-});
-
 
 async function sendMail({ to, subject, html }) {
   const transport = getTransport();
   console.log(`[mailer] sending to ${to}`);
-  await transport.sendMail({
-    from: `"Remit" <${process.env.MAIL_FROM ?? "noreply@remit.com"}>`,
-    to,
-    subject,
-    html,
-  });
+  try {
+    const info = await transport.sendMail({
+      from: `"Remit" <${process.env.MAIL_FROM ?? "noreply@remit.com"}>`,
+      to,
+      subject,
+      html,
+    });
+    console.log(`[mailer] success:`, info.messageId);
+  } catch (err) {
+    console.error(`[mailer] FAILED:`, err.message);
+    throw err;
+  }
 }
 
 const sendVerificationEmail = async (email, fullName, token) => {
