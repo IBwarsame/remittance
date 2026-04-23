@@ -108,7 +108,7 @@ text
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/remit.git
+git clone https://github.com/IBwarsame/remitance.git
 cd remit
 Install backend dependencies:
 
