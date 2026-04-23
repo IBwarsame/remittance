@@ -4,6 +4,7 @@ const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
 
+
 process.on("uncaughtException", (err) => {
     console.error("UNCAUGHT EXCEPTION:", err);
 });
@@ -28,6 +29,8 @@ if (!fs.existsSync(uploadsDir)) {
 
 const app = express();
 
+app.set("trust proxy", 1); // trust Railway's proxy
+
 app.use(cors({
     origin: [
         process.env.FRONTEND_URL || "https://remit-sage.vercel.app",
@@ -35,6 +38,8 @@ app.use(cors({
     ],
     credentials: true,
 }));
+
+app.use(express.json());
 
 app.use(express.json());
 
@@ -49,6 +54,7 @@ app.use("/auth", authRoutes);
 app.use("/quote", quoteRoutes);
 app.use("/beneficiaries", beneficiaryRoutes);
 app.use("/bank-details", bankDetailsRoutes);
+app.set("trust proxy", 1); // add this line
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () =>
