@@ -3,8 +3,16 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
-const { realDb, demoDb } = require("./config/db");
 
+process.on("uncaughtException", (err) => {
+    console.error("UNCAUGHT EXCEPTION:", err);
+});
+
+process.on("unhandledRejection", (err) => {
+    console.error("UNHANDLED REJECTION:", err);
+});
+
+const { realDb, demoDb } = require("./config/db");
 
 const transactionRoutes = require("./routes/transactionRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -19,8 +27,16 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 const app = express();
+
+app.use(cors({
+    origin: [
+        process.env.FRONTEND_URL || "https://remit-sage.vercel.app",
+        "http://localhost:3000",
+    ],
+    credentials: true,
+}));
+
 app.use(express.json());
-app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:3000" }));
 
 app.locals.realDb = realDb;
 app.locals.demoDb = demoDb;
@@ -34,10 +50,7 @@ app.use("/quote", quoteRoutes);
 app.use("/beneficiaries", beneficiaryRoutes);
 app.use("/bank-details", bankDetailsRoutes);
 
-app.use(cors({
-    origin: [
-        process.env.FRONTEND_URL,
-        "http://localhost:3000",
-    ],
-    credentials: true,
-}));
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () =>
+    console.log(`API running on http://localhost:${PORT}`)
+);
